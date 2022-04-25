@@ -25,7 +25,6 @@ class Chatroom {
       .onSnapshot((snapshot) => {
         snapshot.docChanges().forEach((change) => {
           if (change.type === "added") {
-            // update ui
             callback(change.doc.data());
           }
         });
@@ -42,18 +41,3 @@ class Chatroom {
     }
   }
 }
-
-const chatroom = new Chatroom("gaming", "DamN");
-
-chatroom.getChats((data) => {
-  console.log(data);
-});
-
-setTimeout(() => {
-  chatroom.updateRoom("gaming");
-  chatroom.updateName("chris");
-  chatroom.getChats((data) => {
-    console.log(data);
-  });
-  chatroom.addChat("Hello there.");
-}, 3000);
