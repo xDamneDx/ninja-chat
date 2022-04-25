@@ -4,6 +4,7 @@ class Chatroom {
     this.username = username;
     this.chats = db.collection("chats");
   }
+
   async addChat(message) {
     const now = new Date();
     const chat = {
@@ -12,19 +13,22 @@ class Chatroom {
       room: this.room,
       created_at: firebase.firestore.Timestamp.fromDate(now),
     };
-
     const response = await this.chats.add(chat);
+
     return response;
   }
   getChats(callback) {
-    this.chats.onSnapshot((snapshot) => {
-      snapshot.docChanges().forEach((change) => {
-        if (change.type === "added") {
-          // update ui
-          callback(change.doc.data());
-        }
+    this.chats
+      .where("room", "==", this.room)
+      .orderBy("created_at")
+      .onSnapshot((snapshot) => {
+        snapshot.docChanges().forEach((change) => {
+          if (change.type === "added") {
+            // update ui
+            callback(change.doc.data());
+          }
+        });
       });
-    });
   }
 }
 
