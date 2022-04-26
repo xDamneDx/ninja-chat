@@ -2,12 +2,21 @@ const chatList = document.querySelector(".chat-list");
 const newChatForm = document.querySelector(".new-chat");
 const newNameForm = document.querySelector(".new-name");
 const updateMssg = document.querySelector(".update-mssg");
+const chatRooms = document.querySelector(".chat-rooms");
 const username = localStorage.ninjaChatName
   ? localStorage.ninjaChatName
   : "Anon";
 
 const chatUI = new ChatUI(chatList);
 const chatroom = new Chatroom("general", username);
+
+chatRooms.addEventListener("click", (e) => {
+  if (e.target.tagName === "BUTTON") {
+    chatUI.clear();
+    chatroom.updateRoom(e.target.id);
+    chatroom.getChats((data) => chatUI.render(data));
+  }
+});
 
 newChatForm.addEventListener("submit", (e) => {
   e.preventDefault();
